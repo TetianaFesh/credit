@@ -1,4 +1,5 @@
 using Credit.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +29,12 @@ namespace Credit
             services.AddDbContext<creditContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Accounts/Login");
+                    options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Accounts/Login");
+                });
 
             services.AddControllersWithViews();
         }
@@ -50,6 +57,7 @@ namespace Credit
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

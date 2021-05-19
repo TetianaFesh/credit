@@ -35,10 +35,14 @@ namespace Credit.Controllers
                 User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (user == null)
                 {
-                    user = new User { FirstName = model.FirstName, LastName = model.SecondName, Patronymic = model.Patronymic, Email = model.Email, Address = model.Address, Phone = model.Phone, ProbabilityOfInsolvency = model.ProbabilityOfInsolvency};
-                    Account account = new Account { Login = model.Email, Password = model.Password};
+                    user = new User { FirstName = model.FirstName, LastName = model.SecondName, Patronymic = model.Patronymic, Email = model.Email, Address = model.Address, Phone = model.Phone, ProbabilityOfInsolvency = model.ProbabilityOfInsolvency, TypeOfUser = "no"};
 
                     _context.Users.Add(user);
+
+                    //User getUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.FirstName == model.FirstName && u.LastName == model.SecondName);
+                    await _context.SaveChangesAsync();
+
+                    Account account = new Account { Login = model.Email, Password = model.Password, IdNavigation = user };
                     _context.Accounts.Add(account);
                     await _context.SaveChangesAsync();
 
@@ -68,6 +72,32 @@ namespace Credit.Controllers
                 ClaimsIdentity.DefaultRoleClaimType);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Account account = await _context.Accounts
+                    .FirstOrDefaultAsync(u => u.Login == model.Email && u.Password == model.Password);
+
+                if (account != null)
+                {
+                    User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+                    await Authenticate(user);
+
+                    return RedirectToAction("Index", "Home");
+                }
+                ModelState.AddModelError("", "Incorrect email or password");
+            }
+            return View(model);
         }
 
         // GET: Accounts

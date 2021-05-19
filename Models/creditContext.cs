@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using System.Linq;
 
 #nullable disable
 
@@ -29,7 +28,7 @@ namespace Credit.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=TETIANA\\SQLExpress02;Database=credit;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=Tetiana\\SQLExpress02;Database=credit;Trusted_Connection=True;");
             }
         }
 
@@ -191,7 +190,6 @@ namespace Credit.Models
                 entity.Property(e => e.ProbabilityOfInsolvency).HasColumnName("probability_of_insolvency");
 
                 entity.Property(e => e.TypeOfUser)
-                    .IsRequired()
                     .HasMaxLength(15)
                     .IsUnicode(false)
                     .HasColumnName("type_of_user");

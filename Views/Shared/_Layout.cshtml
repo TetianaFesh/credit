@@ -25,24 +25,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="SubmittedApplications" asp-action="Create">Create request for a loan</a>
                         </li>
 
                         @if (User.Identity.IsAuthenticated)
                         {
                             //@if (User.FindFirst(u => u.Type == ClaimsIdentity.DefaultRoleClaimType).Value == "admin")
                             //{
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Accounts" asp-action="Index">Accounts</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="TypeOfLoans" asp-action="Index">Type of loans</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="DebtPayments" asp-action="Index">Debts of payments</a>
-                                </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Accounts" asp-action="Index">Accounts</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="TypeOfLoans" asp-action="Index">Type of loans</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="DebtPayments" asp-action="Index">Debts of payments</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                            </li>
 
                             //}
                             <li class="nav-item">

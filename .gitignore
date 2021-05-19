@@ -1,0 +1,8 @@
+
+*.cache
+obj/Debug/net5.0/Credit.csproj.FileListAbsolute.txt
+*.dll
+*.pdb
+obj/Debug/net5.0/Razor/Views/Shared/_Layout.cshtml.g.cs
+obj/Debug/net5.0/Razor/Views/Accounts/Login.cshtml.g.cs
+obj/Debug/net5.0/Razor/Views/Shared/_Layout.cshtml.g.cs

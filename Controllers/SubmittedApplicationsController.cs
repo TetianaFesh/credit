@@ -49,7 +49,7 @@ namespace Credit.Controllers
         public IActionResult Create()
         {
             ViewData["TypeOfLoanId"] = new SelectList(_context.TypeOfLoans, "Id", "TypeOfLoanRate");
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Address");
+            ViewData["UserId"] = new SelectList(_context.Users, "Id", "FirstName");
             return View();
         }
 

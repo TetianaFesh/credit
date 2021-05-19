@@ -103,7 +103,6 @@ namespace Credit.Models
                 entity.Property(e => e.LoanSize).HasColumnName("loan_size");
 
                 entity.Property(e => e.Status)
-                    .IsRequired()
                     .HasMaxLength(15)
                     .IsUnicode(false)
                     .HasColumnName("status");
@@ -129,9 +128,7 @@ namespace Credit.Models
             {
                 entity.ToTable("type_of_loan");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Percent).HasColumnName("percent");
 

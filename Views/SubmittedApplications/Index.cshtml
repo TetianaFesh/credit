@@ -1,4 +1,7 @@
 ﻿@model IEnumerable<Credit.Models.SubmittedApplication>
+@using Microsoft.AspNetCore.Authentication;
+@using Microsoft.AspNetCore.Authentication.Cookies;
+@using Microsoft.AspNetCore.Http;
 
 @{
     ViewData["Title"] = "Index";
@@ -22,38 +25,89 @@
                 @Html.DisplayNameFor(model => model.Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TypeOfLoan)
+                @Html.DisplayNameFor(model => model.TypeOfLoan.TypeOfLoanRate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.User)
+                @Html.DisplayNameFor(model => model.TypeOfLoan.Percent)
             </th>
+            @Context.Request.Cookies.TryGetValue("TypeOfUser", out string temp);
+            @if (temp == "admin")
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.User)
+                </th>
+            }
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateOfApplicationSubmission)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LoanSize)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TypeOfLoan.TypeOfLoanRate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.Address)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
+
+@if (temp == "admin")
+{
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfApplicationSubmission)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LoanSize)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeOfLoan.TypeOfLoanRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeOfLoan.Percent)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.Email)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+    }
+}
+else
+{
+        @foreach (var item in Model) {
+            Context.Request.Cookies.TryGetValue("UserId", out string temp_Id);
+            Context.Request.Cookies.TryGetValue("TypeOfUser", out string user_Type);
+            if (temp_Id == item.UserId.ToString())
+            {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateOfApplicationSubmission)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.LoanSize)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Status)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TypeOfLoan.TypeOfLoanRate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TypeOfLoan.Percent)
+                        </td>
+                        @if (user_Type == "admin")
+                        {
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
+                            </td>
+                        }
+                        <td>
+                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        </td>
+                    </tr>
+                 }
+    }
 }
     </tbody>
 </table>

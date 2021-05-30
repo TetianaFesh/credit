@@ -1,4 +1,7 @@
 ﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication;
+@using Microsoft.AspNetCore.Authentication.Cookies;
+@using Microsoft.AspNetCore.Http;
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,30 +26,27 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="SubmittedApplications" asp-action="Create">Create request for a loan</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="SubmittedApplications" asp-action="Create">Get loan</a>
                         </li>
 
                         @if (User.Identity.IsAuthenticated)
                         {
-                            //@if (User.FindFirst(u => u.Type == ClaimsIdentity.DefaultRoleClaimType).Value == "admin")
-                            //{
+                            Context.Request.Cookies.TryGetValue("TypeOfUser", out string temp);
+                            @if (temp == "admin")
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="TypeOfLoans" asp-action="Index">Loans</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="DebtPayments" asp-action="Index">Debts</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
+                                </li>                            
+                            }
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Accounts" asp-action="Index">Accounts</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="SubmittedApplications" asp-action="Index">Loans list</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="TypeOfLoans" asp-action="Index">Type of loans</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="DebtPayments" asp-action="Index">Debts of payments</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">Users</a>
-                            </li>
-
-                            //}
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Accounts" asp-action="Logout">Sign out</a>
                             </li>

@@ -58,16 +58,28 @@ namespace Credit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DateOfApplicationSubmission,LoanSize,Status,UserId,TypeOfLoanId")] SubmittedApplication submittedApplication)
+        public async Task<IActionResult> Create(
+            [Bind("DateOfApplicationSubmission,LoanSize,TypeOfLoanId")] 
+            SubmittedApplication submittedApplication)
         {
+            SubmittedApplication subApp = await _context.SubmittedApplications.FirstOrDefaultAsync();
+
             if (ModelState.IsValid)
             {
-                _context.Add(submittedApplication);
+                subApp = new SubmittedApplication {
+                    DateOfApplicationSubmission = submittedApplication.DateOfApplicationSubmission,
+                    LoanSize = submittedApplication.LoanSize,
+                    Status = "In review",
+                    UserId = Int32.Parse(Request.Cookies["UserId"]),
+                    TypeOfLoanId = submittedApplication.TypeOfLoanId
+                };
+                _context.SubmittedApplications.Add(subApp);
+                //_context.Add(submittedApplication);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TypeOfLoanId"] = new SelectList(_context.TypeOfLoans, "Id", "TypeOfLoanRate", submittedApplication.TypeOfLoanId);
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Address", submittedApplication.UserId);
+            //ViewData["TypeOfLoanId"] = new SelectList(_context.TypeOfLoans, "Id", "TypeOfLoanRate", submittedApplication.TypeOfLoanId);
+            //ViewData["UserId"] = new SelectList(_context.Users, "Id", "Address", submittedApplication.UserId);
             return View(submittedApplication);
         }
 
@@ -94,33 +106,43 @@ namespace Credit.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DateOfApplicationSubmission,LoanSize,Status,UserId,TypeOfLoanId")] SubmittedApplication submittedApplication)
+        public async Task<IActionResult> Edit(int id, 
+            [Bind("Id,DateOfApplicationSubmission,LoanSize,Status,UserId,TypeOfLoanId")] 
+            SubmittedApplication submittedApplication)
         {
-            if (id != submittedApplication.Id)
+            if (submittedApplication.Status == "In review")
             {
-                return NotFound();
+                if (id != submittedApplication.Id)
+                {
+                    return NotFound();
+                }
+
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Update(submittedApplication);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!SubmittedApplicationExists(submittedApplication.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            else if (submittedApplication.Status == "Approved")
+            {
+
             }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(submittedApplication);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SubmittedApplicationExists(submittedApplication.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
             ViewData["TypeOfLoanId"] = new SelectList(_context.TypeOfLoans, "Id", "TypeOfLoanRate", submittedApplication.TypeOfLoanId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Address", submittedApplication.UserId);
             return View(submittedApplication);

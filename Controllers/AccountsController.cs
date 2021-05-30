@@ -35,16 +35,16 @@ namespace Credit.Controllers
                 User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (user == null)
                 {
-                    user = new User { FirstName = model.FirstName, LastName = model.SecondName, Patronymic = model.Patronymic, Email = model.Email, Address = model.Address, Phone = model.Phone, ProbabilityOfInsolvency = model.ProbabilityOfInsolvency, TypeOfUser = "no"};
+                    user = new User { FirstName = model.FirstName, LastName = model.SecondName, Patronymic = model.Patronymic, Email = model.Email, Address = model.Address, Phone = model.Phone, ProbabilityOfInsolvency = model.ProbabilityOfInsolvency, Password = model.Password, TypeOfUser = "user"};
 
                     _context.Users.Add(user);
 
                     //User getUser = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.FirstName == model.FirstName && u.LastName == model.SecondName);
                     await _context.SaveChangesAsync();
 
-                    Account account = new Account { Login = model.Email, Password = model.Password, IdNavigation = user };
-                    _context.Accounts.Add(account);
-                    await _context.SaveChangesAsync();
+                    //Account account = new Account { Login = model.Email, Password = model.Password, IdNavigation = user };
+                    //_context.Accounts.Add(account);
+                    //await _context.SaveChangesAsync();
 
                     await Authenticate(user);
 
@@ -85,13 +85,16 @@ namespace Credit.Controllers
         {
             if (ModelState.IsValid)
             {
-                Account account = await _context.Accounts
-                    .FirstOrDefaultAsync(u => u.Login == model.Email && u.Password == model.Password);
+                User user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
 
-                if (account != null)
+                if (user != null)
                 {
-                    User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
-                    await Authenticate(user);
+                    User user_tmp = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+                    await Authenticate(user_tmp);
+
+                    Response.Cookies.Append("TypeOfUser", user_tmp.TypeOfUser);
+                    Response.Cookies.Append("UserId", user_tmp.Id.ToString());
 
                     return RedirectToAction("Index", "Home");
                 }

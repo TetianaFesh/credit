@@ -22,6 +22,7 @@ namespace Credit.Models
         public string Phone { get; set; }
         public double ProbabilityOfInsolvency { get; set; }
         public string TypeOfUser { get; set; }
+        public string Password { get; set; }
 
         public virtual Account Account { get; set; }
         public virtual ICollection<DebtPayment> DebtPayments { get; set; }

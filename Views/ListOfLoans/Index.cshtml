@@ -1,0 +1,113 @@
+﻿@model IEnumerable<Credit.Models.SubmittedApplication>
+@using Microsoft.AspNetCore.Authentication;
+@using Microsoft.AspNetCore.Authentication.Cookies;
+@using Microsoft.AspNetCore.Http;
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOfApplicationSubmission)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LoanSize)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeOfLoan.TypeOfLoanRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TypeOfLoan.Percent)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@Context.Request.Cookies.TryGetValue("TypeOfUser", out string temp);
+@if (temp == "admin")
+{
+    List<SelectListItem> listItems = new List<SelectListItem>();
+    listItems.Add(new SelectListItem
+    {
+         Text = "Submited",
+         Value = "Submited"
+    });
+    listItems.Add(new SelectListItem
+    {
+         Text = "Rejected",
+         Value = "Rejected",
+         Selected = true
+    });
+
+    @foreach (var item in Model) {
+    
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfApplicationSubmission)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LoanSize)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeOfLoan.TypeOfLoanRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeOfLoan.Percent)
+                </td>
+
+                <td>
+                    @Html.DropDownList("yourDropName", listItems, new { @class = "form-control" })
+                </td>
+            </tr>
+    }
+        }
+else
+{
+    List<SelectListItem> listItems = new List<SelectListItem>();
+    listItems.Add(new SelectListItem
+    {
+         Text = "Submited",
+         Value = "Submited"
+    });
+    listItems.Add(new SelectListItem
+    {
+         Text = "Rejected",
+         Value = "Rejected",
+         Selected = true
+    });
+
+     @foreach (var item in Model) {
+        Context.Request.Cookies.TryGetValue("UserId", out string temp_Id);
+        if (temp_Id == item.UserId.ToString())
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfApplicationSubmission)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LoanSize)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeOfLoan.TypeOfLoanRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TypeOfLoan.Percent)
+                </td>
+         
+                <td>
+                    @Html.DropDownList("yourDropName", listItems, new { @class = "form-control" })
+                </td>
+            </tr>
+        }
+    }
+}
+    </tbody>
+</table>

@@ -11,6 +11,7 @@ namespace Credit.Models
         public DateTime Date { get; set; }
         public double PaymentAmount { get; set; }
         public int UserId { get; set; }
+        public string Paid { get; set; }
 
         public virtual User User { get; set; }
     }

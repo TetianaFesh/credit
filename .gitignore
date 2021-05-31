@@ -6,3 +6,7 @@ obj/Debug/net5.0/Credit.csproj.FileListAbsolute.txt
 obj/Debug/net5.0/Razor/Views/Shared/_Layout.cshtml.g.cs
 obj/Debug/net5.0/Razor/Views/Accounts/Login.cshtml.g.cs
 obj/Debug/net5.0/Razor/Views/Shared/_Layout.cshtml.g.cs
+obj/Debug/net5.0/.NETCoreApp,Version=v5.0.AssemblyAttributes.cs
+obj/Debug/net5.0/Credit.AssemblyInfo.cs
+obj/Debug/net5.0/Credit.GeneratedMSBuildEditorConfig.editorconfig
+obj/Debug/net5.0/Credit.RazorAssemblyInfo.cs

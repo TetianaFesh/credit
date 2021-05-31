@@ -1,0 +1,44 @@
+﻿@model Credit.Models.SubmittedApplication
+
+@{
+    ViewData["Title"] = "Payments";
+}
+
+<h1>Payments</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Payments">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            @{
+                    Context.Request.Cookies.TryGetValue("UserId", out string temp);
+                    if (temp == Model.UserId.ToString())
+                    {
+
+                        DateTime date = Model.DateOfApplicationSubmission;
+
+                        for (int i = 0; i < Int32.Parse(Model.Payments); ++i)
+                        {
+                            date = date.AddMonths(Int32.Parse(Model.TypeOfLoan.TypeOfLoanRate));
+                            <div class="form-group">
+                                <label asp-for="@Model.Payments" class="control-label"></label>
+                                <input asp-for="@Model.Payments" class="form-control" value="0" />
+                                <span asp-validation-for="@Model.Payments" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Date</label>
+
+                                <span class="text-danger">@date</span>
+                            </div>
+                        }
+                    }
+            }
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

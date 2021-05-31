@@ -13,6 +13,7 @@ namespace Credit.Models
         public string Status { get; set; }
         public int UserId { get; set; }
         public int TypeOfLoanId { get; set; }
+        public string Payments { get; set; }
 
         public virtual TypeOfLoan TypeOfLoan { get; set; }
         public virtual User User { get; set; }

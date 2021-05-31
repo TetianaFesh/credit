@@ -35,7 +35,7 @@ namespace Credit.Controllers
                 User user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (user == null)
                 {
-                    user = new User { FirstName = model.FirstName, LastName = model.SecondName, Patronymic = model.Patronymic, Email = model.Email, Address = model.Address, Phone = model.Phone, ProbabilityOfInsolvency = model.ProbabilityOfInsolvency, Password = model.Password, TypeOfUser = "user"};
+                    user = new User { FirstName = model.FirstName, LastName = model.SecondName, Patronymic = model.Patronymic, Email = model.Email, Address = model.Address, Phone = model.Phone, ProbabilityOfInsolvency = model.ProbabilityOfInsolvency.ToString(), Password = model.Password, TypeOfUser = "user"};
 
                     _context.Users.Add(user);
 

@@ -20,7 +20,7 @@ namespace Credit.Models
         public string Email { get; set; }
         public string Address { get; set; }
         public string Phone { get; set; }
-        public double ProbabilityOfInsolvency { get; set; }
+        public string ProbabilityOfInsolvency { get; set; }
         public string TypeOfUser { get; set; }
         public string Password { get; set; }
 
